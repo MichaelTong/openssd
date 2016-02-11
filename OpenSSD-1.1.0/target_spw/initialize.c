@@ -86,6 +86,7 @@ void init_jasmine(void)
 	#if OPTION_UART_DEBUG
 	uart_init();
 	uart_print("Welcome to OpenSSD");
+	uart_print("It's Michael Tong's Edit");
 	#endif
 
 	SETREG(SDRAM_ECC_MON, 0xFFFFFFFF);
