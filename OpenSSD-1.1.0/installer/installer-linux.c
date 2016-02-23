@@ -569,7 +569,7 @@ int is_whole_disk_fd(int fd)
 	printf("%s i: %d\n", __func__, i);
 	if (i == 0)
 	{
-		printf("%s geometry.start: %d", __func__, geometry.start);
+		printf("%s geometry.start: %d\n", __func__, geometry.start);
 		return geometry.start == 0;
 	}
     return 0;
