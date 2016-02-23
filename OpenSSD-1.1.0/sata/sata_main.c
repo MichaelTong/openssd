@@ -89,6 +89,9 @@ void Main(void)
 
 			if (cmd.cmd_type == READ)
 			{
+				uart_printf("MikeT: %s %s %d, Receive a read cmd, lba %u, sector_count %u", 
+					__FILE__, __func__, __LINE__,
+					cmd.lba, cmd.sector_count);
 				ftl_read(cmd.lba, cmd.sector_count);
 			}
 			else

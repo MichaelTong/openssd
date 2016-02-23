@@ -25,7 +25,7 @@ UINT8 c_bank_rmap[NUM_BANKS_MAX] = BANK_RMAP;
 void flash_issue_cmd(UINT32 const bank, UINT32 const sync)
 {
 	UINT32 rbank = REAL_BANK(bank);
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	SETREG(FCP_BANK, rbank);
 
 	// You should not issue a new command when Waiting Room is not empty.
@@ -52,7 +52,6 @@ void flash_issue_cmd(UINT32 const bank, UINT32 const sync)
 
 void flash_copy(UINT32 const bank, UINT32 const dst_row, UINT32 const src_row)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	SETREG(FCP_CMD, FC_COPYBACK);
 	SETREG(FCP_BANK, REAL_BANK(bank));
 	SETREG(FCP_OPTION, FO_P | FO_E | FO_B_W_DRDY);
@@ -69,7 +68,6 @@ void flash_copy(UINT32 const bank, UINT32 const dst_row, UINT32 const src_row)
 void flash_modify_copy(UINT32 const bank, UINT32 const dst_row, UINT32 const src_row,
 				UINT32 const sct_offset, UINT32 dma_addr, UINT32 const dma_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	dma_addr -= sct_offset*BYTES_PER_SECTOR;
 
 	SETREG(FCP_CMD, FC_MODIFY_COPYBACK);
@@ -89,7 +87,6 @@ void flash_modify_copy(UINT32 const bank, UINT32 const dst_row, UINT32 const src
 
 void flash_erase(UINT32 const bank, UINT16 const vblk_offset)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ASSERT(vblk_offset > 0 && vblk_offset < VBLKS_PER_BANK);
 
 	SETREG(FCP_CMD, FC_ERASE);
@@ -103,7 +100,6 @@ void flash_erase(UINT32 const bank, UINT16 const vblk_offset)
 
 void flash_finish(void)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	// When the value of MON_CHABANKIDLE is zero, Waiting Room is empty and all the banks are idle.
 	while (GETREG(MON_CHABANKIDLE) != 0);
 }
@@ -111,7 +107,7 @@ void flash_finish(void)
 void flash_clear_irq(void)
 {
 	UINT32 i;
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	for (i = 0; i < NUM_BANKS_MAX; i += 4)
 	{
 		SETREG(BSP_INTR_BASE + i, 0xFFFFFFFF);
@@ -123,11 +119,11 @@ void flash_clear_irq(void)
 void flash_reset(void)
 {
 	UINT32 bank, rbank, ecc_size, nand_cfg_2;
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	SETREG(PMU_ResetCon, RESET_FLASH);
 
 	// FCONF_NANDCFG_1
-
+	uart_printf("MikeT: %s %s %d,  set registers\n", __FILE__, __func__, __LINE__);
 	#if FLASH_TYPE == H27UCG8UDMYR || FLASH_TYPE == H27UBG8T2MYR || FLASH_TYPE == H27UDG8VEMYR ||	\
 		FLASH_TYPE == H27UCG8VFATR || FLASH_TYPE == H27UBG8U5ATR || FLASH_TYPE == H27UBG8T2ATR ||	\
 		FLASH_TYPE == K9GAG08U0D || FLASH_TYPE == K9LBG08U0D || FLASH_TYPE == K9HCG08U1D ||			\

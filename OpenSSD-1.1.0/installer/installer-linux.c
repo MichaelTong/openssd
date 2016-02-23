@@ -566,12 +566,8 @@ int is_whole_disk_fd(int fd)
 
 	if (fd != -1)
 		i = ioctl(fd, HDIO_GETGEO, &geometry);
-	printf("%s i: %d\n", __func__, i);
 	if (i == 0)
-	{
-		printf("%s geometry.start: %d\n", __func__, geometry.start);
 		return geometry.start == 0;
-	}
     return 0;
 }
 
@@ -579,13 +575,11 @@ int is_whole_disk(const char *name)
 {
 	int fd = -1, res = 0;
 	fd = open(name, O_RDONLY);
-	printf("%s fd: %d\n", __func__, fd);
 	if (fd != -1)
 		res = is_whole_disk_fd(fd);
 
 	if (fd != -1)
 		close(fd);
-	printf("%s res: %d\n", __func__, res);
 	return res;
 }
 
@@ -594,15 +588,14 @@ int is_jasmine(const char *name)
 	uint16_t id[256];
 	int fd;
 	char tmp[100];
-	sprintf(tmp, "%s: HDIO_GET_IDENTITY", name);
 	if ((fd = open(name, O_RDONLY|O_NONBLOCK)) < 0) {
         	perror("open");
 		exit(1);
 	}
   
 	if (ioctl(fd, HDIO_GET_IDENTITY, id) < 0) {
-		perror(tmp);
-		exit(1);
+		perror("ioctl, HDIO_GET_IDENTITY:");
+		return 0;
 	}
 
 	close(fd);
@@ -629,8 +622,7 @@ BOOL32 open_target_drv()
 			&ma, &mi, &sz, ptname) != 4)
 			continue;
 		snprintf(devname, sizeof(devname), "/dev/%s", ptname);
-		if (!strstr(devname, "sd"))
-			continue;
+		
 		printf("Examing: %s\n", devname);
 		if (is_whole_disk(devname) && is_jasmine(devname)) 
 		{
