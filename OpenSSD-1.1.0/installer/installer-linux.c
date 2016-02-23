@@ -568,7 +568,7 @@ int is_whole_disk_fd(int fd)
 		i = ioctl(fd, HDIO_GETGEO, &geometry);
 	if (i == 0)
 		return geometry.start == 0;
-        return 0;
+    return 0;
 }
 
 int is_whole_disk(const char *name)
@@ -587,15 +587,15 @@ int is_jasmine(const char *name)
 {
 	uint16_t id[256];
 	int fd;
-
+	
 	if ((fd = open(name, O_RDONLY|O_NONBLOCK)) < 0) {
         	perror("open");
 		exit(1);
 	}
   
 	if (ioctl(fd, HDIO_GET_IDENTITY, id) < 0) {
-		perror("ioctl");
-		exit(1);
+		perror("ioctl, HDIO_GET_IDENTITY:");
+		return 0;
 	}
 
 	close(fd);
@@ -616,16 +616,21 @@ BOOL32 open_target_drv()
 	}
 
         /* lifted from hdparm.c */
-        while (fgets(line, sizeof(line), procpt)) {
+    while (fgets(line, sizeof(line), procpt)) 
+    {
 		if (sscanf (line, " %d %d %llu %128[^\n ]",
 			&ma, &mi, &sz, ptname) != 4)
 			continue;
 		snprintf(devname, sizeof(devname), "/dev/%s", ptname);
-		if (is_whole_disk(devname) && is_jasmine(devname)) {
+		
+		printf("Examing: %s\n", devname);
+		if (is_whole_disk(devname) && is_jasmine(devname)) 
+		{
 			if ((hc->handle = open(devname, O_RDWR|O_DIRECT|O_SYNC)) < 0) {
 				fprintf(stderr, "failed to open jasmine device");
 				exit(1);
 			}
+			break;
 		}
 	}
 	fclose(procpt);
