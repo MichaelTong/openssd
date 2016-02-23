@@ -120,6 +120,7 @@ void Main(void)
 
 void sata_reset(void)
 {
+	uart_printf("MikeT: %s %s %d, reset SATA", __FILE__, __func__, __LINE__);
 	disable_interrupt();
 
 	mem_set_sram(&g_sata_context, 0, sizeof(g_sata_context));

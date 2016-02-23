@@ -40,7 +40,6 @@ void init_jasmine(void)
 	SETREG(CLKSelCon, USE_PLL_CLK);
 
 	// reset hardware modules
-	uart_printf("MikeT: %s %s %d, reset hardware modules", __FILE__, __func__, __LINE__);
 	SETREG(PMU_ResetCon, RESET_SDRAM | RESET_BM | RESET_SATA | RESET_FLASH);
 
 	// GPIO bits
@@ -93,23 +92,18 @@ void init_jasmine(void)
 
 	SETREG(SDRAM_ECC_MON, 0xFFFFFFFF);
 
-	uart_printf("MikeT: %s %s %d, configure SDRAM interrupt", __FILE__, __func__, __LINE__);
 	// configure SDRAM interrupt
 	SETREG(SDRAM_INTCTRL, SDRAM_INT_ENABLE);
 
-	uart_printf("MikeT: %s %s %d, clear interrupt flags in DRAM controller", __FILE__, __func__, __LINE__);
 	// clear interrupt flags in DRAM controller
 	SETREG(SDRAM_INTSTATUS, 0xFFFFFFFF);
 
-	uart_printf("MikeT: %s %s %d, configure ICU", __FILE__, __func__, __LINE__);
 	// configure ICU
 	SETREG(APB_ICU_CON, INTR_SATA);	// SATA = FIQ, other = IRQ
 	SETREG(APB_INT_MSK, INTR_SATA | INTR_FLASH | INTR_SDRAM | INTR_TIMER_1 | INTR_TIMER_2 | INTR_TIMER_3);
 
-	uart_printf("MikeT: %s %s %d, clear interrupt flags in ICU", __FILE__, __func__, __LINE__);
 	// clear interrupt flags in ICU
 	SETREG(APB_INT_STS, 0xFFFFFFFF);
-	uart_printf("MikeT: %s %s %d, reset flash", __FILE__, __func__, __LINE__);
 	flash_reset();
 
 	SETREG(FCONF_PAUSE, 0);
@@ -134,7 +128,6 @@ void init_jasmine(void)
 	}
 
 	#if OPTION_FTL_TEST == FALSE
-	uart_printf("MikeT: %s %s %d, reset SATA", __FILE__, __func__, __LINE__);
 	sata_reset();
 	#endif
 
