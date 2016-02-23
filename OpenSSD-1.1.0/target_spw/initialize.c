@@ -26,7 +26,6 @@ void init_jasmine(void)
 	extern UINT32 Image$$ER_ZI$$ZI$$Length;
 
 	// PLL initialization
-	uart_printf("MikeT: %s %s %d, init jasmine...", __FILE__, __func__, __LINE__);
 
 	SETREG(CLKSelCon, USE_BYPASS_CLK);
 
@@ -40,6 +39,7 @@ void init_jasmine(void)
 	SETREG(CLKSelCon, USE_PLL_CLK);
 
 	// reset hardware modules
+
 	SETREG(PMU_ResetCon, RESET_SDRAM | RESET_BM | RESET_SATA | RESET_FLASH);
 
 	// GPIO bits
@@ -76,9 +76,7 @@ void init_jasmine(void)
 	SETREG(SDRAM_TIMING, SDRAM_PARAM_MAIN_FW_TIMING);
 	SETREG(SDRAM_MRS, SDRAM_PARAM_MAIN_FW_MRS);
 	SETREG(SDRAM_CTRL, SDRAM_INITIALIZE);		// initialization of SDRAM begins now
-	uart_printf("MikeT: %s %s %d, init SDRAM", __FILE__, __func__, __LINE__);
 	while (GETREG(SDRAM_STATUS) & 0x00000010);	// wait until the initialization completes (200us)
-	uart_printf("MikeT: %s %s %d, init SDRAM finished", __FILE__, __func__, __LINE__);
 
 	for (i = 0; i < DRAM_SIZE / MU_MAX_BYTES; i++)
 	{
@@ -104,6 +102,7 @@ void init_jasmine(void)
 
 	// clear interrupt flags in ICU
 	SETREG(APB_INT_STS, 0xFFFFFFFF);
+
 	flash_reset();
 
 	SETREG(FCONF_PAUSE, 0);
@@ -131,7 +130,6 @@ void init_jasmine(void)
 	sata_reset();
 	#endif
 
-	uart_printf("MikeT: %s %s %d, start ftl", __FILE__, __func__, __LINE__);
     ftl_open();
 
 	#if OPTION_FTL_TEST == TRUE

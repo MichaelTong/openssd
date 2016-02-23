@@ -123,7 +123,7 @@ void flash_reset(void)
 	SETREG(PMU_ResetCon, RESET_FLASH);
 
 	// FCONF_NANDCFG_1
-	uart_printf("MikeT: %s %s %d,  set registers\n", __FILE__, __func__, __LINE__);
+
 	#if FLASH_TYPE == H27UCG8UDMYR || FLASH_TYPE == H27UBG8T2MYR || FLASH_TYPE == H27UDG8VEMYR ||	\
 		FLASH_TYPE == H27UCG8VFATR || FLASH_TYPE == H27UBG8U5ATR || FLASH_TYPE == H27UBG8T2ATR ||	\
 		FLASH_TYPE == K9GAG08U0D || FLASH_TYPE == K9LBG08U0D || FLASH_TYPE == K9HCG08U1D ||			\
