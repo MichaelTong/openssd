@@ -629,6 +629,8 @@ BOOL32 open_target_drv()
 			&ma, &mi, &sz, ptname) != 4)
 			continue;
 		snprintf(devname, sizeof(devname), "/dev/%s", ptname);
+		if (!strstr(devname, "sd"))
+			continue;
 		printf("Examing: %s\n", devname);
 		if (is_whole_disk(devname) && is_jasmine(devname)) 
 		{
