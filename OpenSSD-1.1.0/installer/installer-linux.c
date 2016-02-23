@@ -594,7 +594,7 @@ int is_jasmine(const char *name)
 	}
   
 	if (ioctl(fd, HDIO_GET_IDENTITY, id) < 0) {
-		perror("%s: HDIO_GET_IDENTITY", name);
+		perror(strcat(name, ": HDIO_GET_IDENTITY"));
 		exit(1);
 	}
 
