@@ -585,6 +585,7 @@ int is_whole_disk(const char *name)
 
 	if (fd != -1)
 		close(fd);
+	printf("%s res: %d\n", __func__, res);
 	return res;
 }
 
@@ -622,17 +623,20 @@ BOOL32 open_target_drv()
 	}
 
         /* lifted from hdparm.c */
-        while (fgets(line, sizeof(line), procpt)) {
+    while (fgets(line, sizeof(line), procpt)) 
+    {
 		if (sscanf (line, " %d %d %llu %128[^\n ]",
 			&ma, &mi, &sz, ptname) != 4)
 			continue;
 		snprintf(devname, sizeof(devname), "/dev/%s", ptname);
 		printf("Examing: %s\n", devname);
-		if (is_whole_disk(devname) && is_jasmine(devname)) {
+		if (is_whole_disk(devname) && is_jasmine(devname)) 
+		{
 			if ((hc->handle = open(devname, O_RDWR|O_DIRECT|O_SYNC)) < 0) {
 				fprintf(stderr, "failed to open jasmine device");
 				exit(1);
 			}
+			break;
 		}
 	}
 	fclose(procpt);
