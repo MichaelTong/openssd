@@ -622,6 +622,7 @@ BOOL32 open_target_drv()
 			&ma, &mi, &sz, ptname) != 4)
 			continue;
 		snprintf(devname, sizeof(devname), "/dev/%s", ptname);
+		printf("Examing: %s\n", devname);
 		if (is_whole_disk(devname) && is_jasmine(devname)) {
 			if ((hc->handle = open(devname, O_RDWR|O_DIRECT|O_SYNC)) < 0) {
 				fprintf(stderr, "failed to open jasmine device");
