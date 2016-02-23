@@ -93,6 +93,7 @@ void Main(void)
 				//8192(4096k)~16384(8192k)  intersects
 				if(!(cmd.lba+cmd.sector_count < 8192 || cmd.lba > 16384))
 				{
+					uart_printf("MikeT: %s %s %d, going to abort");
 					send_status_to_host(B_ABRT);
 					continue;
 				}
