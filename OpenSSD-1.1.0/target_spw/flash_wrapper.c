@@ -30,7 +30,7 @@ extern UINT32 g_bsp_isr_flag;
 void nand_page_read(UINT32 const bank, UINT32 const vblock, UINT32 const page_num, UINT32 const buf_addr)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
     ASSERT(page_num < PAGES_PER_BLK);
@@ -55,7 +55,7 @@ void nand_page_read(UINT32 const bank, UINT32 const vblock, UINT32 const page_nu
 void nand_page_ptread(UINT32 const bank, UINT32 const vblock, UINT32 const page_num, UINT32 const sect_offset, UINT32 const num_sectors, UINT32 const buf_addr, UINT32 const issue_flag)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 /*     uart_printf("--ptread: bank %d vblock %d page_num %d sect_offset %d, num_sectors %d", bank, vblock, page_num, sect_offset, num_sectors); */
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
@@ -80,7 +80,7 @@ void nand_page_ptread(UINT32 const bank, UINT32 const vblock, UINT32 const page_
 void nand_page_read_to_host(UINT32 const bank, UINT32 const vblock, UINT32 const page_num)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
     ASSERT(page_num < PAGES_PER_BLK);
@@ -119,7 +119,7 @@ void nand_page_read_to_host(UINT32 const bank, UINT32 const vblock, UINT32 const
 void nand_page_ptread_to_host(UINT32 const bank, UINT32 const vblock, UINT32 const page_num, UINT32 const sect_offset, UINT32 const num_sectors)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
     ASSERT(page_num < PAGES_PER_BLK);
@@ -157,7 +157,7 @@ void nand_page_ptread_to_host(UINT32 const bank, UINT32 const vblock, UINT32 con
 void nand_page_program(UINT32 const bank, UINT32 const vblock, UINT32 const page_num, UINT32 const buf_addr)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
     ASSERT(page_num < PAGES_PER_BLK);
@@ -177,7 +177,7 @@ void nand_page_program(UINT32 const bank, UINT32 const vblock, UINT32 const page
 void nand_page_ptprogram(UINT32 const bank, UINT32 const vblock, UINT32 const page_num, UINT32 const sect_offset, UINT32 const num_sectors, UINT32 const buf_addr)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 /*     uart_printf("ptprogram: bank %d vblock %d page_num %d sect_offset %d, num_sectors %d", bank, vblock, page_num, sect_offset, num_sectors); */
 
     ASSERT(bank < NUM_BANKS);
@@ -199,7 +199,7 @@ void nand_page_ptprogram(UINT32 const bank, UINT32 const vblock, UINT32 const pa
 void nand_page_program_from_host(UINT32 const bank, UINT32 const vblock, UINT32 const page_num)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
     ASSERT(page_num < PAGES_PER_BLK);
@@ -226,7 +226,7 @@ void nand_page_program_from_host(UINT32 const bank, UINT32 const vblock, UINT32 
 void nand_page_ptprogram_from_host(UINT32 const bank, UINT32 const vblock, UINT32 const page_num, UINT32 const sect_offset, UINT32 const num_sectors)
 {
     UINT32 row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
     ASSERT(page_num < PAGES_PER_BLK);
@@ -256,7 +256,7 @@ void nand_page_copyback(UINT32 const bank, UINT32 const src_vblock, UINT32 const
 	BOOL32	do_copyback;
 
     UINT32 src_row, dst_row;
-
+    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(src_vblock < VBLKS_PER_BANK);
     ASSERT(dst_vblock < VBLKS_PER_BANK);
@@ -362,7 +362,7 @@ void nand_page_modified_copyback(UINT32 const bank, UINT32 const src_vblock, UIN
     // TODO
 	BOOL32	do_copyback;
 	UINT32	src_row, dst_row;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(src_vblock < VBLKS_PER_BANK);
     ASSERT(dst_vblock < VBLKS_PER_BANK);
@@ -477,6 +477,7 @@ void nand_page_modified_copyback(UINT32 const bank, UINT32 const src_vblock, UIN
 }
 void nand_block_erase(UINT32 const bank, UINT32 const vblock)
 {
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
 
@@ -492,6 +493,7 @@ void nand_block_erase(UINT32 const bank, UINT32 const vblock)
 }
 void nand_block_erase_sync(UINT32 const bank, UINT32 const vblock)
 {
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT(vblock < VBLKS_PER_BANK);
 

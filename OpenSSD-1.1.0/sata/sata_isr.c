@@ -24,7 +24,7 @@ static __inline void send_primitive_R_XX(UINT32 response)
 {
 	UINT32	timeout_value;
 	UINT32	g_R_OK_retry_count = 2;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	if ((GETREG(SATA_PHY_STATUS) >> 4) & 0x01)
 	{
 		timeout_value = ((((UINT32)CLOCK_SPEED / 2 / 1000000) * 300) / PRESCALE_TO_DIV(TIMER_PRESCALE_0));	// 300us
@@ -63,6 +63,7 @@ SEND_RETRY:
 
 static __inline void handle_srst(void)
 {
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_primitive_R_XX(SEND_R_OK);
 
 	SETREG(SATA_INT_STAT, REG_FIS_RECV | OPERATION_OK);
@@ -97,7 +98,7 @@ static __inline void handle_srst(void)
 static __inline void handle_got_cfis(void)
 {
 	UINT32 lba, sector_count, cmd_code, cmd_type, fis_d1, fis_d3;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	cmd_code = (GETREG(SATA_FIS_H2D_0) & 0x00FF0000) >> 16;
 	cmd_type = ata_cmd_class_table[cmd_code];
 	fis_d1 = GETREG(SATA_FIS_H2D_1);
@@ -237,7 +238,7 @@ __irq void fiq_handler(void)
 	UINT32 unmasked_int_stat = GETREG(SATA_INT_STAT);
 	UINT32 masked_int_stat = unmasked_int_stat & GETREG(SATA_INT_ENABLE);
 	UINT32 intr_processed = 0;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	if (masked_int_stat & CMD_RECV)
 	{
 		handle_got_cfis();

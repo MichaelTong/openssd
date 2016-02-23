@@ -277,7 +277,7 @@ static UINT16 get_integrity_word(void)
 	UINT8	checksum = 0;
 	UINT16	i;
 	UINT16	retval;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	for (i = 0; i < BYTES_PER_SECTOR - 2; i++)
 	{
 		checksum += g_temp_mem[i];
@@ -294,7 +294,7 @@ static void set_string_data(UINT16 *id_buffer, char* src_data, UINT32 whole_word
 {
 	BOOL32 fill_space = FALSE;
 	UINT32 i=0;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	for(i=0; i<whole_word_size; i++)
 	{
 		if(FALSE == fill_space)
@@ -325,7 +325,7 @@ void ata_identify_device(UINT32 lba, UINT32 sector_count)
 {
 	UINT16* const addr = ht_identify_data;
 	UINT32 capacity;
-
+	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	set_string_data(&addr[10], "0123456789", 10);
 	set_string_data(&addr[23], "0001", 4);
 	set_string_data(&addr[27], "OpenSSD Jasmine     ", 20);
