@@ -94,7 +94,9 @@ void Main(void)
 				if(!(cmd.lba+cmd.sector_count < 8192 || cmd.lba > 16384))
 				{
 					uart_printf("MikeT: %s %s %d, going to abort", __FILE__, __func__, __LINE__);
-					send_status_to_host(B_ABRT);
+					send_status_to_host(B_UNC);
+					uart_printf("MikeT: %s %s %d, aborted", __FILE__, __func__, __LINE__);
+
 					continue;
 				}
 				ftl_read(cmd.lba, cmd.sector_count);
