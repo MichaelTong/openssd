@@ -587,14 +587,14 @@ int is_jasmine(const char *name)
 {
 	uint16_t id[256];
 	int fd;
-
+	char tmp[100];
 	if ((fd = open(name, O_RDONLY|O_NONBLOCK)) < 0) {
         	perror("open");
 		exit(1);
 	}
   
 	if (ioctl(fd, HDIO_GET_IDENTITY, id) < 0) {
-		perror(sprintf("%s: HDIO_GET_IDENTITY", name));
+		perror(sprintf(tmp, "%s: HDIO_GET_IDENTITY", name));
 		exit(1);
 	}
 
