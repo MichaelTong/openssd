@@ -144,7 +144,7 @@ void nand_page_ptread_to_host(UINT32 const bank, UINT32 const vblock, UINT32 con
     #if OPTION_FTL_TEST == FALSE
     {
         while (1)
-        {
+        {//wait for slow sata
             UINT32 sata_id = GETREG(SATA_RBUF_PTR);
 
             if (g_ftl_read_buf_id != sata_id)

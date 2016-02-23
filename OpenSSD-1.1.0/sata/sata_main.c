@@ -90,6 +90,12 @@ void Main(void)
 			if (cmd.cmd_type == READ)
 			{
 				uart_printf("MikeT: %s %s %d, lba: %u, sector_count: %u\n", __FILE__, __func__, __FILE__, cmd.lba, cmd.sector_count);
+				//8192(4096k)~16384(8192k)  intersects
+				if(!(cmd.lba+cmd.sector_count < 8192 || cmd.lba > 16384))
+				{
+					send_status_to_host(B_ABRT);
+					continue;
+				}
 				ftl_read(cmd.lba, cmd.sector_count);
 			}
 			else
