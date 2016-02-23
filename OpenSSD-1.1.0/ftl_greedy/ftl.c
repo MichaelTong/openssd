@@ -130,7 +130,7 @@ static void sanity_check(void)
 {
     UINT32 dram_requirement = RD_BUF_BYTES + WR_BUF_BYTES + COPY_BUF_BYTES + FTL_BUF_BYTES
         + HIL_BUF_BYTES + TEMP_BUF_BYTES + BAD_BLK_BMP_BYTES + PAGE_MAP_BYTES + VCOUNT_BYTES;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     if ((dram_requirement > DRAM_SIZE) || // DRAM metadata size check
         (sizeof(misc_metadata) > BYTES_PER_PAGE)) // misc metadata size check
     {
@@ -142,7 +142,7 @@ static void build_bad_blk_list(void)
 {
 	UINT32 bank, num_entries, result, vblk_offset;
 	scan_list_t* scan_list = (scan_list_t*) TEMP_BUF_ADDR;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	mem_set_dram(BAD_BLK_BMP_ADDR, NULL, BAD_BLK_BMP_BYTES);
 
 	disable_irq();
@@ -263,7 +263,7 @@ void ftl_open(void)
 
     /* UINT32 volatile g_break = 0; */
     /* while (g_break == 0); */
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	led(0);
     sanity_check();
     //----------------------------------------
@@ -301,7 +301,6 @@ void ftl_open(void)
 }
 void ftl_flush(void)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     /* ptimer_start(); */
     logging_pmap_table();
     logging_misc_metadata();
@@ -310,7 +309,6 @@ void ftl_flush(void)
 // Testing FTL protocol APIs
 void ftl_test_write(UINT32 const lba, UINT32 const num_sectors)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(lba + num_sectors <= NUM_LSECTORS);
     ASSERT(num_sectors > 0);
 
@@ -318,11 +316,9 @@ void ftl_test_write(UINT32 const lba, UINT32 const num_sectors)
 }
 void ftl_read(UINT32 const lba, UINT32 const num_sectors)
 {
-
     UINT32 remain_sects, num_sectors_to_read;
     UINT32 lpn, sect_offset;
     UINT32 bank, vpn;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 
     lpn          = lba / SECTORS_PER_PAGE;
     sect_offset  = lba % SECTORS_PER_PAGE;
@@ -382,7 +378,6 @@ void ftl_write(UINT32 const lba, UINT32 const num_sectors)
 {
     UINT32 remain_sects, num_sectors_to_write;
     UINT32 lpn, sect_offset;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 
     lpn          = lba / SECTORS_PER_PAGE;
     sect_offset  = lba % SECTORS_PER_PAGE;
@@ -411,7 +406,6 @@ static void write_page(UINT32 const lpn, UINT32 const sect_offset, UINT32 const 
     CHECK_LPAGE(lpn);
     ASSERT(sect_offset < SECTORS_PER_PAGE);
     ASSERT(num_sectors > 0 && num_sectors <= SECTORS_PER_PAGE);
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 
     UINT32 bank, old_vpn, new_vpn;
     UINT32 vblock, page_num, page_offset, column_cnt;
@@ -522,14 +516,12 @@ static void write_page(UINT32 const lpn, UINT32 const sect_offset, UINT32 const 
 // get vpn from PAGE_MAP
 static UINT32 get_vpn(UINT32 const lpn)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     CHECK_LPAGE(lpn);
     return read_dram_32(PAGE_MAP_ADDR + lpn * sizeof(UINT32));
 }
 // set vpn to PAGE_MAP
 static void set_vpn(UINT32 const lpn, UINT32 const vpn)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     CHECK_LPAGE(lpn);
     ASSERT(vpn >= (META_BLKS_PER_BANK * PAGES_PER_BLK) && vpn < (VBLKS_PER_BANK * PAGES_PER_BLK));
 
@@ -539,7 +531,6 @@ static void set_vpn(UINT32 const lpn, UINT32 const vpn)
 static UINT32 get_vcount(UINT32 const bank, UINT32 const vblock)
 {
     UINT32 vcount;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 
     ASSERT(bank < NUM_BANKS);
     ASSERT((vblock >= META_BLKS_PER_BANK) && (vblock < VBLKS_PER_BANK));
@@ -552,7 +543,6 @@ static UINT32 get_vcount(UINT32 const bank, UINT32 const vblock)
 // set valid page count of vblock
 static void set_vcount(UINT32 const bank, UINT32 const vblock, UINT32 const vcount)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
     ASSERT((vblock >= META_BLKS_PER_BANK) && (vblock < VBLKS_PER_BANK));
     ASSERT((vcount < PAGES_PER_BLK) || (vcount == VC_MAX));
@@ -561,7 +551,6 @@ static void set_vcount(UINT32 const bank, UINT32 const vblock, UINT32 const vcou
 }
 static UINT32 assign_new_write_vpn(UINT32 const bank)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     ASSERT(bank < NUM_BANKS);
 
     UINT32 write_vpn;
@@ -614,7 +603,6 @@ static UINT32 assign_new_write_vpn(UINT32 const bank)
 }
 static BOOL32 is_bad_block(UINT32 const bank, UINT32 const vblk_offset)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     if (tst_bit_dram(BAD_BLK_BMP_ADDR + bank*(VBLKS_PER_BANK/8 + 1), vblk_offset) == FALSE)
     {
         return FALSE;
@@ -644,7 +632,7 @@ static void garbage_collection(UINT32 const bank)
     gc_vblock = get_gc_vblock(bank);
     free_vpn  = gc_vblock * PAGES_PER_BLK;
 
-     uart_printf("garbage_collection bank %d, vblock %d",bank, vt_vblock); 
+/*     uart_printf("garbage_collection bank %d, vblock %d",bank, vt_vblock); */
 
     ASSERT(vt_vblock != gc_vblock);
     ASSERT(vt_vblock >= META_BLKS_PER_BANK && vt_vblock < VBLKS_PER_BANK);
@@ -698,7 +686,7 @@ static void garbage_collection(UINT32 const bank)
     ASSERT((free_vpn % PAGES_PER_BLK) < (PAGES_PER_BLK - 2));
     ASSERT((free_vpn % PAGES_PER_BLK == vcount));
 
-     uart_printf("gc page count : %d", vcount); 
+/*     uart_printf("gc page count : %d", vcount); */
 
     // 4. update metadata
     set_vcount(bank, vt_vblock, VC_MAX);
@@ -718,7 +706,7 @@ static UINT32 get_vt_vblock(UINT32 const bank)
     ASSERT(bank < NUM_BANKS);
 
     UINT32 vblock;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     // search the block which has mininum valid pages
     vblock = mem_search_min_max(VCOUNT_ADDR + (bank * VBLKS_PER_BANK * sizeof(UINT16)),
                                 sizeof(UINT16),
@@ -785,7 +773,7 @@ static void init_metadata_sram(void)
     UINT32 bank;
     UINT32 vblock;
     UINT32 mapblk_lbn;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     //----------------------------------------
     // initialize misc. metadata
     //----------------------------------------
@@ -855,7 +843,7 @@ static void logging_misc_metadata(void)
     UINT32 vcount_bytes    = NUM_VCOUNT_SECT * BYTES_PER_SECTOR; // per bank
     UINT32 vcount_boundary = VCOUNT_ADDR + VCOUNT_BYTES; // entire vcount data
     UINT32 bank;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     flash_finish();
 
     for (bank = 0; bank < NUM_BANKS; bank++)
@@ -898,7 +886,7 @@ static void logging_pmap_table(void)
     UINT32 bank;
     UINT32 pmap_boundary = PAGE_MAP_ADDR + PAGE_MAP_BYTES;
     BOOL32 finished = FALSE;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     for (UINT32 mapblk_lbn = 0; mapblk_lbn < MAPBLKS_PER_BANK; mapblk_lbn++)
     {
         flash_finish();
@@ -955,7 +943,6 @@ static void logging_pmap_table(void)
 // load flushed FTL metadta
 static void load_metadata(void)
 {
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
     load_misc_metadata();
     load_pmap_table();
 }
@@ -970,7 +957,7 @@ static void load_misc_metadata(void)
     UINT32 load_flag = 0;
     UINT32 bank, page_num;
     UINT32 load_cnt = 0;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     flash_finish();
 
 	disable_irq();
@@ -1031,7 +1018,7 @@ static void load_pmap_table(void)
     UINT32 pmap_boundary = PAGE_MAP_ADDR + (NUM_LPAGES * sizeof(UINT32));
     UINT32 mapblk_lbn, bank;
     BOOL32 finished = FALSE;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
     flash_finish();
 
     for (mapblk_lbn = 0; mapblk_lbn < MAPBLKS_PER_BANK; mapblk_lbn++)
@@ -1103,7 +1090,7 @@ static void write_format_mark(void)
 	#endif
 
 	UINT32 format_mark_page_offset = FW_PAGE_OFFSET + firmware_image_pages;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	mem_set_dram(FTL_BUF_ADDR, 0, BYTES_PER_SECTOR);
 
 	SETREG(FCP_CMD, FC_COL_ROW_IN_PROG);
@@ -1141,7 +1128,7 @@ static BOOL32 check_format_mark(void)
 
 	UINT32 format_mark_page_offset = FW_PAGE_OFFSET + firmware_image_pages;
 	UINT32 temp;
-    uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	flash_clear_irq();	// clear any flash interrupt flags that might have been set
 
 	SETREG(FCP_CMD, FC_COL_ROW_READ_OUT);

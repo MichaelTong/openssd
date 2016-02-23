@@ -25,7 +25,7 @@ void ata_check_power_mode(UINT32 lba, UINT32 sector_count)
 	UINT32 fis_type = FISTYPE_REGISTER_D2H;
 	UINT32 flags = B_IRQ;
 	UINT32 status = B_DRDY | BIT4;
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16));
 	SETREG(SATA_FIS_D2H_1, GETREG(SATA_FIS_H2D_1));
 	SETREG(SATA_FIS_D2H_2, GETREG(SATA_FIS_H2D_2) & 0x00FFFFFF);
@@ -43,21 +43,19 @@ void ata_check_power_mode(UINT32 lba, UINT32 sector_count)
 
 void ata_flush_cache(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ftl_flush();
 	send_status_to_host(0);
 }
 
 void ata_read_verify_sectors(UINT32 const lba, UINT32 const sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_status_to_host(0);
 }
 
 void ata_set_features(UINT32 lba, UINT32 sector_count)
 {
 	BOOL8 invalid = FALSE;
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	switch (GETREG(SATA_FIS_H2D_0) >> 24)
 	{
 		case FEATURE_ENABLE_WRITE_CACHE:
@@ -104,7 +102,6 @@ void ata_set_features(UINT32 lba, UINT32 sector_count)
 
 void ata_seek(UINT32 const lba, UINT32 const sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	if (lba > MAX_LBA)
 	{
 		send_status_to_host(B_IDNF);
@@ -117,25 +114,21 @@ void ata_seek(UINT32 const lba, UINT32 const sector_count)
 
 void ata_set_multiple_mode(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_status_to_host(0);
 }
 
 void ata_read_buffer(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	pio_sector_transfer(HIL_BUF_ADDR, PIO_D2H);
 }
 
 void ata_write_buffer(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	pio_sector_transfer(HIL_BUF_ADDR, PIO_H2D);
 }
 
 void ata_standby(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ftl_flush();
 
 	send_status_to_host(0);
@@ -143,7 +136,6 @@ void ata_standby(UINT32 lba, UINT32 sector_count)
 
 void ata_standby_immediate(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ftl_flush();
 
 	send_status_to_host(0);
@@ -151,7 +143,6 @@ void ata_standby_immediate(UINT32 lba, UINT32 sector_count)
 
 void ata_idle(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ftl_flush();
 
 	send_status_to_host(0);
@@ -159,7 +150,6 @@ void ata_idle(UINT32 lba, UINT32 sector_count)
 
 void ata_idle_immediate(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ftl_flush();
 
 	send_status_to_host(0);
@@ -167,7 +157,6 @@ void ata_idle_immediate(UINT32 lba, UINT32 sector_count)
 
 void ata_sleep(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_status_to_host(0);
 }
 
@@ -180,7 +169,7 @@ void ata_read_native_max_address(UINT32 lba, UINT32 sector_count)
 	SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16));
 
 	UINT32 fis_d1 = GETREG(SATA_FIS_H2D_1);
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	if (g_sata_context.slow_cmd.code == ATA_READ_NATIVE_MAX_ADDRESS_EXT)
 	{
 		SETREG(SATA_FIS_D2H_1, (fis_d1 & 0xFF000000) | (MAX_LBA & 0x00FFFFFF));
@@ -211,13 +200,11 @@ void ata_read_native_max_address(UINT32 lba, UINT32 sector_count)
 
 void ata_nop(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_status_to_host(B_ABRT);
 }
 
 void ata_initialize_device_parameters(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	if ((sector_count & 0xFF) == 0)
 	{
 		send_status_to_host(B_ABRT);
@@ -243,13 +230,11 @@ void ata_initialize_device_parameters(UINT32 lba, UINT32 sector_count)
 
 void ata_recalibrate(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_status_to_host(0);
 }
 
 void ata_not_supported(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	send_status_to_host(B_ABRT);
 }
 
@@ -258,7 +243,7 @@ void send_status_to_host(UINT32 const err_code)
 	UINT32 fis_type = FISTYPE_REGISTER_D2H;
 	UINT32 flags = B_IRQ;
 	UINT32 status = (err_code == 0) ? (B_DRDY|BIT4) : (B_DRDY|BIT4|B_ERR);
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	SETREG(SATA_FIS_D2H_0, fis_type | (flags << 8) | (status << 16) | (err_code << 24));
 	SETREG(SATA_FIS_D2H_1, GETREG(SATA_FIS_H2D_1));
 	SETREG(SATA_FIS_D2H_2, GETREG(SATA_FIS_H2D_2) & 0x00FFFFFF);
@@ -276,14 +261,13 @@ void send_status_to_host(UINT32 const err_code)
 
 void ata_execute_drive_diagnostics(UINT32 lba, UINT32 sector_count)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	ata_srst(TRUE, NULL);
 }
 
 void ata_srst(UINT32 lba, UINT32 sector_count)
 {
 	BOOL32 interrupt = (lba != 0);
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	SETREG(SATA_FIS_D2H_0, 0x01500000 | (interrupt << 14) | FISTYPE_REGISTER_D2H);
 	SETREG(SATA_FIS_D2H_1, 0x00000001);
 	SETREG(SATA_FIS_D2H_2, 0x00000000);
@@ -304,7 +288,6 @@ void ata_srst(UINT32 lba, UINT32 sector_count)
 
 void pio_sector_transfer(UINT32 const dram_addr, UINT32 const protocol)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	disable_fiq();
 
 	SETREG(SATA_CTRL_3, BIT3);	// switch from Buffer Manager Mode to Manual Mode

@@ -33,7 +33,6 @@ static UINT32 eventq_get_count(void)
 
 static void eventq_get(CMD_T* cmd)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	disable_fiq();
 
 	SETREG(SATA_EQ_CTRL, 1);	// The next entry from the Event Queue is copied to SATA_EQ_DATA_0 through SATA_EQ_DATA_2.
@@ -67,7 +66,7 @@ __inline ATA_FUNCTION_T search_ata_function(UINT32 command_code)
 {
 	UINT32 index;
 	ATA_FUNCTION_T ata_function;
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	index = mem_search_equ(ata_command_code_table, sizeof(UINT8), CMD_TABLE_SIZE, MU_CMD_SEARCH_EQU_SRAM, command_code);
 
 	ata_function = (index == CMD_TABLE_SIZE) ? ata_not_supported : ata_function_table[index];
@@ -118,7 +117,6 @@ void Main(void)
 
 void sata_reset(void)
 {
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
 	disable_interrupt();
 
 	mem_set_sram(&g_sata_context, 0, sizeof(g_sata_context));
@@ -182,7 +180,7 @@ void delay(UINT32 const count)
 {
 	static volatile UINT32 temp;
 	UINT32 i;
-	uart_printf("MikeT: %s %s %d\n", __FILE__, __func__, __LINE__);
+
 	for (i = 0; i < count; i++)
 	{
 		temp = i;
