@@ -89,6 +89,7 @@ void Main(void)
 
 			if (cmd.cmd_type == READ)
 			{
+				uart_printf("MikeT: %s %s %d, lba: %u, sector_count: %u\n", __FILE__, __func__, __FILE__, cmd.lba, cmd.sector_count);
 				ftl_read(cmd.lba, cmd.sector_count);
 			}
 			else
