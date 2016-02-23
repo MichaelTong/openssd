@@ -588,7 +588,7 @@ int is_jasmine(const char *name)
 	uint16_t id[256];
 	int fd;
 	char tmp[100];
-	sprintf(tmp, "%s: HDIO_GET_IDENTITY", name)
+	sprintf(tmp, "%s: HDIO_GET_IDENTITY", name);
 	if ((fd = open(name, O_RDONLY|O_NONBLOCK)) < 0) {
         	perror("open");
 		exit(1);
