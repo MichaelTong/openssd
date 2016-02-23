@@ -566,15 +566,20 @@ int is_whole_disk_fd(int fd)
 
 	if (fd != -1)
 		i = ioctl(fd, HDIO_GETGEO, &geometry);
+	printf("%s i: %d\n", __func__, i);
 	if (i == 0)
+	{
+		printf("%s geometry.start: %d", __func__, geometry.start);
 		return geometry.start == 0;
-        return 0;
+	}
+    return 0;
 }
 
 int is_whole_disk(const char *name)
 {
 	int fd = -1, res = 0;
 	fd = open(name, O_RDONLY);
+	printf("%s fd: %d\n", __func__, fd);
 	if (fd != -1)
 		res = is_whole_disk_fd(fd);
 
