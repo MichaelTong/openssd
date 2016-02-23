@@ -587,7 +587,7 @@ int is_jasmine(const char *name)
 {
 	uint16_t id[256];
 	int fd;
-	char tmp[100];
+	
 	if ((fd = open(name, O_RDONLY|O_NONBLOCK)) < 0) {
         	perror("open");
 		exit(1);
