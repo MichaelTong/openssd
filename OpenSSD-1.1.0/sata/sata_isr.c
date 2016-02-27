@@ -237,18 +237,21 @@ __irq void fiq_handler(void)
 	UINT32 unmasked_int_stat = GETREG(SATA_INT_STAT);
 	UINT32 masked_int_stat = unmasked_int_stat & GETREG(SATA_INT_ENABLE);
 	UINT32 intr_processed = 0;
-	uart_printf("MikeT: %s %s %d, %x", __FILE__, __func__, __LINE__, unmasked_int_stat);
+	uart_printf("MikeT: fiq_handler, SATA_INT_STAT: %x", unmasked_int_stat);
 	if (masked_int_stat & CMD_RECV)
 	{
+		uart_printf("MikeT: fiq_handler, CMD_RECV");
 		handle_got_cfis();
 		intr_processed = CMD_RECV;
 	}
 	else if (masked_int_stat & OPERATION_ERR)
 	{
+		uart_printf("MikeT: fiq_handler, OPERATION_ERR");
 		led_blink();
 	}
 	else if (masked_int_stat & REG_FIS_RECV)
 	{
+		uart_printf("MikeT: fiq_handler, REG_FIS_RECV");
 		if ((GETREG(SATA_FIS_H2D_0) & 0x000000FF) == FISTYPE_REGISTER_H2D)
 		{
 			handle_srst();
@@ -271,6 +274,7 @@ __irq void fiq_handler(void)
 	}
 	else if (masked_int_stat & PHY_ONLINE)
 	{
+		uart_printf("MikeT: fiq_handler, PHY_ONLINE");
 		intr_processed = 0xFFFFFFFF;
 
 		g_sata_context.slow_cmd.code = ATA_SRST;
@@ -281,6 +285,7 @@ __irq void fiq_handler(void)
 	}
 	else
 	{
+		uart_printf("MikeT: fiq_handler, OTHER");
 		intr_processed = masked_int_stat;
 	}
 
