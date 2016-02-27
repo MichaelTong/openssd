@@ -105,7 +105,6 @@ static __inline void handle_got_cfis(void)
 
 	if (cmd_type & ATR_LBA_NOR)
 	{
-		uart_printf("MikeT: cmd_type, ATR_LBA_NOR");
 		if ((fis_d1 & BIT30) == 0)	// CHS
 		{
 			UINT32 cylinder = (fis_d1 & 0x00FFFF00) >> 8;
@@ -128,7 +127,6 @@ static __inline void handle_got_cfis(void)
 	}
 	else if (cmd_type & ATR_LBA_EXT)
 	{
-		uart_printf("MikeT: cmd_type, ATR_LBA_EXT");
 		lba = (fis_d1 & 0x00FFFFFF) | (GETREG(SATA_FIS_H2D_2) << 24);
 		sector_count = fis_d3 & 0x0000FFFF;
 
@@ -139,7 +137,6 @@ static __inline void handle_got_cfis(void)
 	}
 	else
 	{
-		uart_printf("MikeT: cmd_type, OTHER");
 		lba = 0;
 		sector_count = 0;
 	}
@@ -157,7 +154,6 @@ static __inline void handle_got_cfis(void)
 
 		if (cmd_type & CCL_FTL_H2D)
 		{
-			uart_printf("MikeT: cmd_type, CCL_FTL_H2D");
 			SETREG(SATA_INSERT_EQ_W, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a write command.
 
 			if (cmd_code == ATA_WRITE_DMA || cmd_code == ATA_WRITE_DMA_EXT)
@@ -184,7 +180,6 @@ static __inline void handle_got_cfis(void)
 		}
 		else
 		{
-			uart_printf("MikeT: cmd_type, CCL_FTL_D2H");
 			SETREG(SATA_INSERT_EQ_R, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a read command.
 
 			if (cmd_code == ATA_READ_DMA || cmd_code == ATA_READ_DMA_EXT)

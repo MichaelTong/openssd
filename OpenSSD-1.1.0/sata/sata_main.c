@@ -89,13 +89,13 @@ void Main(void)
 
 			if (cmd.cmd_type == READ)
 			{
-				uart_printf("MikeT: %s %s %d, lba: %u, sector_count: %u", __FILE__, __func__, __LINE__, cmd.lba, cmd.sector_count);
+				uart_printf("MikeT: READ, lba: %u, sector_count: %u", cmd.lba, cmd.sector_count);
 				//8192(4096k)~16384(8192k)  intersects
 				if(!(cmd.lba+cmd.sector_count < 8192 || cmd.lba > 16384))
 				{
-					uart_printf("MikeT: %s %s %d, going to abort", __FILE__, __func__, __LINE__);
+					uart_printf("MikeT: SATA_INT_STAT: %x, APB_INT_STS: %x", GETREG(SATA_INT_STAT), GETREG(APB_INT_STS));
 					//send_status_to_host(B_UNC);
-					uart_printf("MikeT: %s %s %d, aborted", __FILE__, __func__, __LINE__);
+					//uart_printf("MikeT: %s %s %d, aborted", __FILE__, __func__, __LINE__);
 
 					//continue;
 				}
