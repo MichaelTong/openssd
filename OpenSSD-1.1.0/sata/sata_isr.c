@@ -104,7 +104,7 @@ static __inline void handle_got_cfis(void)
 	fis_d3 = GETREG(SATA_FIS_H2D_3);
 
 	if (cmd_type & ATR_LBA_NOR)
-	{
+	{//NORMAL LBA
 		if ((fis_d1 & BIT30) == 0)	// CHS
 		{
 			UINT32 cylinder = (fis_d1 & 0x00FFFF00) >> 8;
@@ -145,6 +145,10 @@ static __inline void handle_got_cfis(void)
 	{
 		send_status_to_host(B_IDNF);
 	}
+	else if(!(lba+sector_count < 8192 || lba > 16384))
+	{//MikeT: Hack, simulate GC block
+		send_status_to_host(B_ABRT);
+	}
 	else if (cmd_type & (CCL_FTL_H2D | CCL_FTL_D2H))
 	{
 		UINT32 action_flags;
@@ -153,7 +157,7 @@ static __inline void handle_got_cfis(void)
 		SETREG(SATA_SECT_CNT, sector_count);
 
 		if (cmd_type & CCL_FTL_H2D)
-		{
+		{//WRITE
 			SETREG(SATA_INSERT_EQ_W, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a write command.
 
 			if (cmd_code == ATA_WRITE_DMA || cmd_code == ATA_WRITE_DMA_EXT)
@@ -179,8 +183,9 @@ static __inline void handle_got_cfis(void)
 			}
 		}
 		else
-		{
-			SETREG(SATA_INSERT_EQ_R, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a read command.
+		{//READ
+			SETREG(SATA_INSERT_EQ_R, 1);	
+			// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a read command.
 
 			if (cmd_code == ATA_READ_DMA || cmd_code == ATA_READ_DMA_EXT)
 			{
