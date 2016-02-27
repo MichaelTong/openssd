@@ -97,7 +97,7 @@ void Main(void)
 					//send_status_to_host(B_UNC);
 					//uart_printf("MikeT: %s %s %d, aborted", __FILE__, __func__, __LINE__);
 					disable_fiq();
-					SETREG(APB_INT_STS, SATA_INTR);
+					SETREG(APB_INT_STS, INTR_SATA);
 					SETREG(SATA_INT_STAT, OPERATION_OK);
 					enable_fiq();
 					uart_printf("MikeT: SATA_INT_STAT: %x, APB_INT_STS: %x", GETREG(SATA_INT_STAT), GETREG(APB_INT_STS));
