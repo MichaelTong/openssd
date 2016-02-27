@@ -105,6 +105,7 @@ static __inline void handle_got_cfis(void)
 
 	if (cmd_type & ATR_LBA_NOR)
 	{
+		uart_printf("MikeT: cmd_type, ATR_LBA_NOR");
 		if ((fis_d1 & BIT30) == 0)	// CHS
 		{
 			UINT32 cylinder = (fis_d1 & 0x00FFFF00) >> 8;
@@ -127,6 +128,7 @@ static __inline void handle_got_cfis(void)
 	}
 	else if (cmd_type & ATR_LBA_EXT)
 	{
+		uart_printf("MikeT: cmd_type, ATR_LBA_EXT");
 		lba = (fis_d1 & 0x00FFFFFF) | (GETREG(SATA_FIS_H2D_2) << 24);
 		sector_count = fis_d3 & 0x0000FFFF;
 
@@ -137,6 +139,7 @@ static __inline void handle_got_cfis(void)
 	}
 	else
 	{
+		uart_printf("MikeT: cmd_type, OTHER");
 		lba = 0;
 		sector_count = 0;
 	}
@@ -154,6 +157,7 @@ static __inline void handle_got_cfis(void)
 
 		if (cmd_type & CCL_FTL_H2D)
 		{
+			uart_printf("MikeT: cmd_type, CCL_FTL_H2D");
 			SETREG(SATA_INSERT_EQ_W, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a write command.
 
 			if (cmd_code == ATA_WRITE_DMA || cmd_code == ATA_WRITE_DMA_EXT)
@@ -180,6 +184,7 @@ static __inline void handle_got_cfis(void)
 		}
 		else
 		{
+			uart_printf("MikeT: cmd_type, CCL_FTL_D2H");
 			SETREG(SATA_INSERT_EQ_R, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a read command.
 
 			if (cmd_code == ATA_READ_DMA || cmd_code == ATA_READ_DMA_EXT)
@@ -237,21 +242,17 @@ __irq void fiq_handler(void)
 	UINT32 unmasked_int_stat = GETREG(SATA_INT_STAT);
 	UINT32 masked_int_stat = unmasked_int_stat & GETREG(SATA_INT_ENABLE);
 	UINT32 intr_processed = 0;
-	uart_printf("MikeT: fiq_handler, SATA_INT_STAT: %x", unmasked_int_stat);
 	if (masked_int_stat & CMD_RECV)
 	{
-		uart_printf("MikeT: fiq_handler, CMD_RECV");
 		handle_got_cfis();
 		intr_processed = CMD_RECV;
 	}
 	else if (masked_int_stat & OPERATION_ERR)
 	{
-		uart_printf("MikeT: fiq_handler, OPERATION_ERR");
 		led_blink();
 	}
 	else if (masked_int_stat & REG_FIS_RECV)
 	{
-		uart_printf("MikeT: fiq_handler, REG_FIS_RECV");
 		if ((GETREG(SATA_FIS_H2D_0) & 0x000000FF) == FISTYPE_REGISTER_H2D)
 		{
 			handle_srst();
@@ -274,7 +275,6 @@ __irq void fiq_handler(void)
 	}
 	else if (masked_int_stat & PHY_ONLINE)
 	{
-		uart_printf("MikeT: fiq_handler, PHY_ONLINE");
 		intr_processed = 0xFFFFFFFF;
 
 		g_sata_context.slow_cmd.code = ATA_SRST;
@@ -285,7 +285,6 @@ __irq void fiq_handler(void)
 	}
 	else
 	{
-		uart_printf("MikeT: fiq_handler, OTHER");
 		intr_processed = masked_int_stat;
 	}
 
