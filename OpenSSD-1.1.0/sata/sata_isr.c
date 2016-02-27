@@ -147,6 +147,7 @@ static __inline void handle_got_cfis(void)
 	}
 	else if(!(lba+sector_count < 8192 || lba > 16384))
 	{//MikeT: Hack, simulate GC block
+	 //8192(4096k)~16384(8192k)  intersects
 		send_status_to_host(B_ABRT);
 	}
 	else if (cmd_type & (CCL_FTL_H2D | CCL_FTL_D2H))
@@ -158,7 +159,8 @@ static __inline void handle_got_cfis(void)
 
 		if (cmd_type & CCL_FTL_H2D)
 		{//WRITE
-			SETREG(SATA_INSERT_EQ_W, 1);	// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a write command.
+			SETREG(SATA_INSERT_EQ_W, 1);	
+			// The contents of SATA_LBA and SATA_SECT_CNT are inserted into the event queue as a write command.
 
 			if (cmd_code == ATA_WRITE_DMA || cmd_code == ATA_WRITE_DMA_EXT)
 			{
@@ -211,7 +213,8 @@ static __inline void handle_got_cfis(void)
 		}
 
 		SETREG(SATA_XFER_BYTES, sector_count * BYTES_PER_SECTOR);
-		SETREG(SATA_SECT_OFFSET, lba);	// this information is used by SATA hardware to calculate sector offset into page buffer
+		SETREG(SATA_SECT_OFFSET, lba);	
+		// this information is used by SATA hardware to calculate sector offset into page buffer
 
 		if (GETREG(SATA_EQ_STATUS) >> 31)
 		{

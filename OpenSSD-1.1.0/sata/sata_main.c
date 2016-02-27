@@ -91,9 +91,9 @@ void Main(void)
 			{
 				uart_printf("MikeT: READ, lba: %u, sector_count: %u", cmd.lba, cmd.sector_count);
 				//8192(4096k)~16384(8192k)  intersects
-				if(!(cmd.lba+cmd.sector_count < 8192 || cmd.lba > 16384))
-				{
-					uart_printf("MikeT: SATA_INT_STAT: %x, APB_INT_STS: %x", GETREG(SATA_INT_STAT), GETREG(APB_INT_STS));
+				//if(!(cmd.lba+cmd.sector_count < 8192 || cmd.lba > 16384))
+				//{
+					//uart_printf("MikeT: SATA_INT_STAT: %x, APB_INT_STS: %x", GETREG(SATA_INT_STAT), GETREG(APB_INT_STS));
 					//send_status_to_host(B_UNC);
 					//uart_printf("MikeT: %s %s %d, aborted", __FILE__, __func__, __LINE__);
 					//disable_fiq();
@@ -101,8 +101,8 @@ void Main(void)
 					//SETREG(SATA_INT_STAT, OPERATION_OK);
 					//enable_fiq();
 					//uart_printf("MikeT: SATA_INT_STAT: %x, APB_INT_STS: %x", GETREG(SATA_INT_STAT), GETREG(APB_INT_STS));
-					//continue;
-				}
+				//	continue;
+				//}
 				ftl_read(cmd.lba, cmd.sector_count);
 			}
 			else
