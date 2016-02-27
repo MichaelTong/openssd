@@ -16,6 +16,7 @@
 // along with Jasmine. See the file COPYING.
 // If not, see <http://www.gnu.org/licenses/>.
 
+//MikeT: Only slow cmd??
 
 #include "jasmine.h"
 

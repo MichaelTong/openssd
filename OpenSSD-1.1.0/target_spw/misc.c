@@ -85,7 +85,7 @@ __irq void irq_handler(void)
 #endif
 {
 	UINT32 intr_stat = GETREG(APB_INT_STS);
-
+	uart_printf("MikeT: %s %s %d, %x", __FILE__, __func__, __LINE__, intr_stat);
 	if (intr_stat & (INTR_TIMER_1 | INTR_TIMER_2 | INTR_TIMER_3))
 	{
 		g_timer_interrupt_count++;

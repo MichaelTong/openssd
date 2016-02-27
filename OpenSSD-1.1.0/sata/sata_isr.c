@@ -237,7 +237,7 @@ __irq void fiq_handler(void)
 	UINT32 unmasked_int_stat = GETREG(SATA_INT_STAT);
 	UINT32 masked_int_stat = unmasked_int_stat & GETREG(SATA_INT_ENABLE);
 	UINT32 intr_processed = 0;
-
+	uart_printf("MikeT: %s %s %d, %x", __FILE__, __func__, __LINE__, unmasked_int_stat);
 	if (masked_int_stat & CMD_RECV)
 	{
 		handle_got_cfis();
