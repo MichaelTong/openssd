@@ -143,12 +143,12 @@ static __inline void handle_got_cfis(void)
 
 	if (lba + sector_count > MAX_LBA + 1 && (cmd_type & ATR_NO_SECT) == 0)
 	{
-		send_status_to_host(B_ABRT);
+		send_status_to_host(B_IDNF);
 	}
 	else if(!(lba+sector_count < 8192 || lba > 16384))
 	{//MikeT: Hack, simulate GC block
 	 //8192(4096k)~16384(8192k)  intersects
-		send_status_to_host(B_IDNF);
+		send_status_to_host(B_ABRT);
 	}
 	else if (cmd_type & (CCL_FTL_H2D | CCL_FTL_D2H))
 	{
